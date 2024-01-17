@@ -1,6 +1,32 @@
+import { SubnettingInit } from "./ui-subnetting";
+import { VLSMInit } from "./ui-vlsm";
 
-let message = 'Hello World!';
+const homepage = document.querySelector('main div').innerHTML;
+const siteLogo = document.querySelector('header img');
 
-for (let i = 0; i < 5; i++) {
-  console.log(message);
-}
+const contentArea = document.querySelector('main div');
+const sidebarsBtn = document.querySelectorAll('aside button');
+
+export function unchild(parent) {
+    if (parent) {
+      let child = parent.firstChild;
+      while (child) {
+        child.remove();
+        child = parent.firstChild;
+      }
+    }
+  }
+  
+siteLogo.onclick = () => {
+    unchild(contentArea);
+    contentArea.innerHTML = homepage;
+};
+
+sidebarsBtn.forEach((btn) => {
+    btn.addEventListener('click', () => {
+        unchild(contentArea);
+    });
+});
+
+sidebarsBtn[0].addEventListener('click', SubnettingInit);
+sidebarsBtn[1].addEventListener('click', VLSMInit);

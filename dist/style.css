@@ -1,16 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap');
 
+
 :root {
-	--darker-color: #004E6B;
-	--lighter-color: #BDD1D8;
-    --page-color: #FCFCFC;
-    --second-page-color: #EDF2F3;
-	--highlight: #F4E04D;
-	--color-primary: #cdd9e5;
-	--border-color: #F4E04D;
-	--border-color-hover: #F8EEA5;
-	--button-color: #F4E04D;
-	--text-color: #000F14;
+	--page-color: #F4F2EF;
+    --text-color: #050A0F;
+    --text-color-darkmode: #F4F2EF;
+    --highlight-color: #E6863A;
+    --button-color: #213E60;
+    --element-background-color: #bad0f5;
 }
 
 * {
@@ -22,6 +19,7 @@ body {
     color: var(--text-color);
     background-color: var(--page-color);
     padding-top: 57px;
+    margin: 0;
 }
 
 header {
@@ -36,15 +34,17 @@ header {
 
 header img{
     height: 35px;
+    cursor: pointer;
 }
 
 main {
     padding: 0px 100px 0px 500px;
-    background-color: var(--second-page-color);
+    background-color: var(--page-color);
+    color: var(--text-color);
 }
 
 .content-area {
-    padding: 20px 40px;
+    padding: 0px 40px;
 }
 
 aside {
@@ -55,10 +55,9 @@ aside {
 	left: 0;
     bottom: 0;
     top: 65px;
-    padding: 0px 40px 20px 200px;
+    padding: 0px 30px 20px 200px;
     display: flex;
     flex-direction: column;
-    row-gap: 10px;
 }
 
 aside h4 {
@@ -69,14 +68,17 @@ aside button {
     border: none;
 	text-align: left;
     background-color: transparent;
-    padding: 0;
+    padding: 5px 5px;
     font-family: 'Inter', sans-serif;
     color: var(--text-color);
     font-size: 13px;
     cursor: pointer;
     font-weight: 500;
+    border-radius: 7px;
 }
 
 aside button:hover {
-	color: var(--highlight);
+	background-color: var(--highlight-color);
+    color: var(--text-color-darkmode);
+
 }

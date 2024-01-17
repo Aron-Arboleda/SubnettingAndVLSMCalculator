@@ -1,0 +1,5 @@
+#inputContainer {
+    display: grid;
+    grid-template-columns: 30% 1fr;
+    column-gap: 10px;
+}

@@ -14,6 +14,10 @@
 	box-sizing: border-box;
 }
 
+div {
+    display: inline-block;
+}
+
 body {
     font-family: 'Inter', sans-serif;
     color: var(--text-color);

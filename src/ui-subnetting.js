@@ -1,4 +1,9 @@
+import { unchild } from "./index.js";
+
 const contentArea = document.querySelector('main div');
+
+const resultContainer = document.createElement('div');
+resultContainer.id = 'resultContainerSubnetting';
 
 export function SubnettingInit() {
     const title = document.createElement('h2');
@@ -14,91 +19,125 @@ export function SubnettingInit() {
 
     subnettingFormInit(form);
 
-    contentArea.append(title, context, calculatorTitle, form);
+    
+    contentArea.append(title, context, calculatorTitle, form, resultContainer);
 }
 
 function subnettingFormInit(form) {
-    form.innerHTML = `
-        <div id="inputContainer">
-            <label>Network Class</label>
-            <div>
-                <input type="radio" name="abc">
-                <label>A</label>
-                <input type="radio" name="abc">
-                <label>B</label>
-                <input type="radio" name="abc">
-                <label>C</label>
-            </div>
-            <label>Host needed per subnet</label>
-            <input type="number" min="2" max="2147483648">
-            <label>IP Address</label>
-            <div>
-                <input type="number" min="1" max="255">
-                <label>.</label>
-                <input type="number" min="1" max="255">
-                <label>.</label>
-                <input type="number" min="1" max="255">
-                <label>.</label>
-                <input type="number" min="1" max="255">
-            </div>
-        </div>
-    `;
+    const inputContainer = document.createElement('div');
+    inputContainer.id = 'inputContainer';
 
-    /** 
-    const gridDiv = document.createElement('div');
-    gridDiv.className = 'inputContainer';
+    const networkClassLabel = document.createElement('label');
+    networkClassLabel.textContent = 'Network Class';
+    inputContainer.appendChild(networkClassLabel);
+
+    const networkClassDiv = document.createElement('div');
+    const networkClassInputs = ['A', 'B', 'C'].map((labelText) => {
+      const input = document.createElement('input');
+      input.type = 'radio';
+      input.name = 'abc';
+      input.value = labelText;
+      const label = document.createElement('label');
+      label.textContent = labelText;
+      networkClassDiv.appendChild(input);
+      networkClassDiv.appendChild(label);
+      return input;
+    });
+    inputContainer.appendChild(networkClassDiv);
+
+    const hostLabel = document.createElement('label');
+    hostLabel.textContent = 'Host needed per subnet';
+    inputContainer.appendChild(hostLabel);
+
+    const hostInput = document.createElement('input');
+    hostInput.type = 'number';
+    hostInput.min = '2';
+    hostInput.max = '2147483648';
+    inputContainer.appendChild(hostInput);
+
+    const ipAddressLabel = document.createElement('label');
+    ipAddressLabel.textContent = 'IP Address';
+    inputContainer.appendChild(ipAddressLabel);
+
+    const ipAddressDiv = document.createElement('div');
+    const ipAddressOctetsInputs = [];
+    for (let i = 0; i < 4; i++) {
+      const input = document.createElement('input');
+      input.type = 'number';
+      input.min = '0';
+      input.max = '255';
+      ipAddressDiv.appendChild(input);
+      ipAddressOctetsInputs.push(input);
+      if (i < 3) {
+        const dotLabel = document.createElement('label');
+        dotLabel.textContent = ' . ';
+        ipAddressDiv.appendChild(dotLabel);
+      }
+    }
+    const slashLabel = document.createElement('label');
+    slashLabel.textContent = ' / ';
+    ipAddressDiv.appendChild(slashLabel);
+
+    const prefixInput = document.createElement('input');
+    prefixInput.type = 'number';
+    prefixInput.min = '0';
+    prefixInput.max = '32';
+    ipAddressDiv.appendChild(prefixInput);
+
+    const [ octet1, octet2, octet3, octet4 ] = ipAddressOctetsInputs;
+
+    inputContainer.appendChild(ipAddressDiv);
+
+    form.appendChild(inputContainer);
+
+    const resultButton = document.createElement('button');
+    resultButton.className = 'resultButton';
+    resultButton.id = 'resultButtonSubnetting';
+    resultButton.type = 'submit';
+    resultButton.textContent = 'Compute and Show Results';
+    form.appendChild(resultButton);
+
+    const warningMsg = document.createElement('p');
+    warningMsg.className = 'warningMsg';
+    warningMsg.id = 'warningMsgSubnetting';
+    form.appendChild(warningMsg);
+
+    resultButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        unchild(resultContainer);
+
+        const emptyChecker = ((networkClassInputs[0].checked == false && networkClassInputs[1].checked == false && networkClassInputs[2].checked == false) || !hostInput.value || !octet1.value || !octet2.value || !octet3.value || !octet4.value || !prefixInput.value);
+        
+        const limitChecker = (hostInput.value > 2147483648 || hostInput.value < 2) || (prefixInput.value > 30 || prefixInput.value < 0) || 
+        [octet1, octet2, octet3, octet4].some((x) => {
+            return (x.value > 255 || x.value < 0);
+        });
+        
+        if (emptyChecker){
+            warningMsg.innerHTML = '*All fields are required';
+        } else if (limitChecker) {
+            warningMsg.innerHTML = '*Please enter valid IP address / hosts needed';
+        } else {
+            warningMsg.innerHTML = '';
+        }
+
+        if (warningMsg.innerHTML === ''){
+            const networkClass = networkClassInputs.filter((input) => input.checked)[0].value;
+            const hosts = parseInt(hostInput.value);
+            const ipAddress = [octet1.value, octet2.value, octet3.value, octet4.value].map((x) => parseInt(x));
+            const prefix = parseInt(prefixInput.value);
+            displayResults(networkClass, hosts, ipAddress, prefix);
+
+            console.log(networkClass, hosts, ipAddress, prefix);
+        }
+
+    });
+
+
+
     
-    const labelNetworkClass = document.createElement('label');
-    labelNetworkClass.textContent = 'Network Class';
-    const radioButtonWrapperDiv = document.createElement('div');
-    const inputNetworkClassA = document.createElement('input');
-    inputNetworkClassA.type = 'radio';
-    inputNetworkClassA.name = 'abc';
-    const inputNetworkClassB = document.createElement('input');
-    inputNetworkClassB.type = 'radio';
-    inputNetworkClassB.name = 'abc';
-    const inputNetworkClassC = document.createElement('input');
-    inputNetworkClassC.type = 'radio';
-    inputNetworkClassC.name = 'abc';
-    radioButtonWrapperDiv.append(inputNetworkClassA, inputNetworkClassB, inputNetworkClassC);
-    labelNetworkClass.for = 'netClassContainer';
+}
 
-
-
-
-
-
-
-    
-    const labelHostNeeded = document.createElement('label');
-    labelHostNeeded.innerText = 'Number of Host Needed per Subnet';
-    const inputHostNeeded = document.createElement('input');
-    inputNetworkClassA.type = 'number';
-    labelHostNeeded.appendChild(inputHostNeeded);
-
-    
-    const labelIPAddress = document.createElement('label');
-    labelIPAddress.innerText = 'IP Address';
-    const ipAddressWrapperDiv = document.createElement('div');
-    const inputIPAddressOctet1 = document.createElement('input');
-    inputIPAddressOctet1.type = 'number';
-    const dot1 = document.createElement('p');
-    dot1.innerText = '.';
-    const inputIPAddressOctet2 = document.createElement('input');
-    inputIPAddressOctet2.type = 'number';
-    const dot2 = document.createElement('p');
-    dot2.innerText = '.';
-    const inputIPAddressOctet3 = document.createElement('input');
-    inputIPAddressOctet3.type = 'number';
-    const dot3 = document.createElement('p');
-    dot3.innerText = '.';
-    const inputIPAddressOctet4 = document.createElement('input');
-    inputIPAddressOctet4.type = 'number';
-    ipAddressWrapperDiv.append(inputIPAddressOctet1, dot1, inputIPAddressOctet2, dot2, inputIPAddressOctet3, dot3);
-    labelIPAddress.appendChild(ipAddressWrapperDiv);
-
-    gridDiv.append(labelNetworkClass, radioButtonWrapperDiv, labelHostNeeded, inputHostNeeded, labelIPAddress, ipAddressWrapperDiv);
-    
-    form.append(gridDiv);
-    */
+function displayResults() {
+    // under construction
 }

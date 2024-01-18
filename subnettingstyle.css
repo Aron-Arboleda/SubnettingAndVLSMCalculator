@@ -1,5 +1,45 @@
+@import url("./style.css");
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap');
+
 #inputContainer {
     display: grid;
     grid-template-columns: 30% 1fr;
     column-gap: 10px;
+}
+
+.resultButton {
+    display: block;
+    margin: 20px auto;
+    background-color: var(--button-color);
+    border: none;
+    font-family: 'Inter', 'sans-serif';
+    color: var(--text-color-darkmode);
+    border-radius: 8px;
+    font-size: 16px;
+    padding: 7px 20px;
+    cursor: pointer;
+}
+
+.resultButton:hover {
+    background-color: var(--element-background-color) ;
+    color: var(--text-color);
+}
+
+
+@keyframes buttonClick {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(0.95);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.resultButton:active {
+    animation-name: buttonClick;
+    animation-duration: 0.2s;
+    animation-fill-mode: forwards;
 }

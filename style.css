@@ -1,6 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap');
 
-
 :root {
 	--page-color: #F4F2EF;
     --text-color: #050A0F;
@@ -85,4 +84,12 @@ aside button:hover {
 	background-color: var(--highlight-color);
     color: var(--text-color-darkmode);
 
+}
+
+.warningMsg {
+    color: var(--highlight-color);
+    font-size: 14px;
+    text-align: center;
+    font-style: italic;
+    margin: 0px auto;
 }

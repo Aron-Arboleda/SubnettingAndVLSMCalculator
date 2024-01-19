@@ -29,4 +29,4 @@ export function computeSubnets(networkClass, hosts, ipAddress, prefix) {
 
 
 
-//console.log(computeSubnets('C', 10, [220,168,2,0], 24));
+// console.log(computeSubnets('C', 10, [220,168,2,0], 24));

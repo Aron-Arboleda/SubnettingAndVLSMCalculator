@@ -5,22 +5,10 @@ const contentArea = document.querySelector('main div');
 const resultContainer = document.createElement('div');
 resultContainer.id = 'resultContainerSubnetting';
 
-export function SubnettingInit() {
-    const title = document.createElement('h2');
-    title.innerText = 'Subnetting';
-    const context = document.createElement('p');
-    context.innerText = 'Subnetting is a crucial aspect of IP network design achieved by dividing a larger network into smaller subnets. This process involves redistributing host bits within an IP address through binary operations. The subnet mask delineates the network and host portions of the IP address, and administrators choose mask lengths based on specific subnet requirements. Subnetting enables efficient address space utilization and enhances network organization by creating smaller, manageable segments.';
-
-    const calculatorTitle = document.createElement('h3');
-    calculatorTitle.textContent = `🧮 Subnetting Calculator`;
-
-    const form = document.createElement('form');
-    form.id = 'subnetting-form';
-
-    subnettingFormInit(form);
-
+function displayResults(networkClass, hosts, ipAddress, prefix) {
+    const subnets = computeSubnets(networkClass, hosts, ipAddress, prefix);
     
-    contentArea.append(title, context, calculatorTitle, form, resultContainer);
+    
 }
 
 function subnettingFormInit(form) {
@@ -133,6 +121,23 @@ function subnettingFormInit(form) {
     });
 }
 
-function displayResults(networkClass, hosts, ipAddress, prefix) {
+export function SubnettingInit() {
+    const title = document.createElement('h2');
+    title.innerText = 'Subnetting';
+    const context = document.createElement('p');
+    context.innerText = 'Subnetting is a crucial aspect of IP network design achieved by dividing a larger network into smaller subnets. This process involves redistributing host bits within an IP address through binary operations. The subnet mask delineates the network and host portions of the IP address, and administrators choose mask lengths based on specific subnet requirements. Subnetting enables efficient address space utilization and enhances network organization by creating smaller, manageable segments.';
+
+    const calculatorTitle = document.createElement('h3');
+    calculatorTitle.textContent = `🧮 Subnetting Calculator`;
+
+    const form = document.createElement('form');
+    form.id = 'subnetting-form';
+
+    subnettingFormInit(form);
+
     
+    contentArea.append(title, context, calculatorTitle, form, resultContainer);
 }
+
+
+

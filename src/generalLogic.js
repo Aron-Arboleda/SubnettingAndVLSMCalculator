@@ -9,7 +9,7 @@ export function intToBinary(integer) {
 export function getCapacity(hosts) {
     for (let i = 0; i < 32; i++) {
         if (Math.pow(2, i) > hosts){
-            return { capacity: Math.pow(2, i), bits: i };
+            return [ Math.pow(2, i), i ];
         }
     }
 }
@@ -17,19 +17,19 @@ export function getCapacity(hosts) {
 export function computeSubnetMask(prefix) {
     let binarySubnetMask = '';
     for (let i = 0; i < 32; i++) {
+        if (i % 8 === 0 && i !== 0) {
+            binarySubnetMask += '.';
+        }
+
         if (i < prefix) {
             binarySubnetMask += '1';
         } else {
             binarySubnetMask += '0';
         }
-        binarySubnetMask += '1';
-        if (i % 8 == 0) {
-            binarySubnetMask += '.';
-        }
     }
     const binaryOctets = binarySubnetMask.split('.');
     const subnetMask = binaryOctets.map(binaryToInt).join('.');
-    return {subnetMask, binarySubnetMask};
+    return [subnetMask, binarySubnetMask];
 }
 
 export function computeWildcardMask(subnetMask) {
@@ -49,3 +49,6 @@ export function getIPType(ipv4Address) {
 
     return privateRanges.some(regex => regex.test(ipv4Address)) ? 'Private' : 'Public';
 }
+
+//console.log(1 % 8);
+console.log(computeSubnetMask(26));

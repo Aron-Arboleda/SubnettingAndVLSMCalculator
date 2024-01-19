@@ -2,9 +2,10 @@
   "name": "subnettingandvlsmcalculator",
   "version": "1.0.0",
   "description": "Subnetting and VLSM Calculator for Networking",
-  "main": "index.js",
+  "type": "module",
+  "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "lint": "eslint ./"
   },
   "keywords": [],
@@ -12,6 +13,7 @@
   "license": "ISC",
   "devDependencies": {
     "eslint": "^8.56.0",
+    "jest": "^29.7.0",
     "webpack-cli": "^5.1.4"
   },
   "dependencies": {

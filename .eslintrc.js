@@ -26,6 +26,7 @@ module.exports = {
         "semi": [
             "error",
             "always"
-        ]
+        ],
+        'no-use-before-define': 'error',
     }
 };

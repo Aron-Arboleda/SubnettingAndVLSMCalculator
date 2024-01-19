@@ -130,14 +130,9 @@ function subnettingFormInit(form) {
 
             console.log(networkClass, hosts, ipAddress, prefix);
         }
-
     });
-
-
-
-    
 }
 
-function displayResults() {
-    // under construction
+function displayResults(networkClass, hosts, ipAddress, prefix) {
+    
 }

@@ -1,4 +1,5 @@
 import { unchild } from "./index.js";
+import { doSubnetting } from "./logic-subnetting.js";
 
 const contentArea = document.querySelector('main div');
 
@@ -6,8 +7,8 @@ const resultContainer = document.createElement('div');
 resultContainer.id = 'resultContainerSubnetting';
 
 function displayResults(networkClass, hosts, ipAddress, prefix) {
-    const subnets = computeSubnets(networkClass, hosts, ipAddress, prefix);
-    
+    const subnets = doSubnetting(networkClass, hosts, ipAddress, prefix);
+
     
 }
 

@@ -1,5 +1,5 @@
-import { SubnettingInit } from "./ui-subnetting";
-import { VLSMInit } from "./ui-vlsm";
+import { SubnettingInit } from "./ui-subnetting.js";
+import { VLSMInit } from "./ui-vlsm.js";
 
 const homepage = document.querySelector('main div').innerHTML;
 const siteLogo = document.querySelector('header img');

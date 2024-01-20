@@ -1,6 +1,6 @@
 /* eslint-disable */
 
-import { computeSubnets } from '../logic-subnetting.js';
+import { doSubnetting } from '../logic-subnetting.js';
 import { describe, expect, it } from "vitest";
 
 describe('#computeSubnets', () => {
@@ -14,7 +14,7 @@ describe('#computeSubnets', () => {
             IPclass,
             CIDRnotation,
             IPType,
-            Short } = computeSubnets('C', 50, [192,168,2,0], 24);
+            Short } = doSubnetting('C', 50, [192,168,2,0], 24);
         expect(totalNumberOfHosts).toEqual(64);
         expect(numberOfUsableHosts).toEqual(62);
         expect(subnetMask).toEqual('255.255.255.192');

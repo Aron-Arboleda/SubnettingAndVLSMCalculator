@@ -1,0 +1,75 @@
+.resultTables {
+    width: 60%;
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 0.9em;
+    font-family: 'Inter', sans-serif;
+    min-width: 400px;
+    box-shadow: 0 0 20px #00000026;
+}
+
+.resultTables thead tr {
+    background-color: var(--highlight-color);
+    color: var(--text-color-darkmode);
+    text-align: left;
+}
+
+.resultTables th,
+.resultTables td {
+    padding: 12px 15px;
+}
+
+.resultTables tbody tr {
+    border-bottom: 1px solid #dddddd;
+}
+
+.resultTables tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}
+
+.resultTables tbody tr:last-of-type {
+    border-bottom: 2px solid var(--highlight-color);
+}
+
+.resultTables tbody tr.active-row {
+    font-weight: bold;
+    color: var(--text-color);
+}
+
+.subnettingTables {
+
+    max-width: 100%;
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 0.75em;
+    font-family: 'Inter', sans-serif;
+    text-align: center;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+.subnettingTables thead tr {
+    background-color: #009879;
+    color: #ffffff;
+    text-align: left;
+}
+
+.subnettingTables th,
+.subnettingTables td {
+    padding: 10px 13px;
+}
+
+.subnettingTables tbody tr {
+    border-bottom: 1px solid #dddddd;
+}
+
+.subnettingTables tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}
+
+.subnettingTables tbody tr:last-of-type {
+    border-bottom: 2px solid var(--highlight-color);
+}
+
+.subnettingTables tbody tr:hover {
+    background-color: #f1f1f1;
+}

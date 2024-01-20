@@ -6,10 +6,47 @@ const contentArea = document.querySelector('main div');
 const resultContainer = document.createElement('div');
 resultContainer.id = 'resultContainerSubnetting';
 
-function displayResults(networkClass, hosts, ipAddress, prefix) {
-    const subnets = doSubnetting(networkClass, hosts, ipAddress, prefix);
-
+function displayResults(networkClass, usableHosts, ipAddress, prefix) {
+    const resultHeader = document.createElement('h3');
+    resultHeader.textContent = 'Results';
     
+    const computedDataObject = doSubnetting(networkClass, usableHosts, ipAddress, prefix);
+    const computedDataValues = Object.values(computedDataObject);
+    const initialInfoLabels = ['IP Address:', 'Total Number of Hosts per Subnet:', 'Number of Usable Hosts per Subnet:', 'Total Subnets Created:', 'Subnet Mask:', 'Binary Subnet Mask:', 'Wildcard Mask:', 'Network Class:', 'CIDR Notation:', 'IP Type:', 'Short Form:'];
+    const initialInfoTable = document.createElement('table');
+    initialInfoTable.className = 'resultTables';
+
+    for (let i = 0; i < initialInfoLabels.length; i++) {
+        const row = initialInfoTable.insertRow();
+        const labelCell = row.insertCell();
+        labelCell.textContent = initialInfoLabels[i];
+        const dataCell = row.insertCell();
+        dataCell.textContent = computedDataValues[i];
+    }
+
+    const subnetTableHeader = document.createElement('h4');
+    subnetTableHeader.textContent = 'Subnetting Table';
+
+    const subnettingInfoLabels = ['Subnet', 'Network Address', 'First Usable Host', 'Last Usable Host', 'Broadcast Address', 'Number of Usable Hosts', 'Subnet Mask', 'Prefix'];
+    const subnettingInfoTable = document.createElement('table');
+    subnettingInfoTable.className = 'subnettingTables';
+
+    const subnettingTableHeaderRow = subnettingInfoTable.insertRow();
+    for (let label of subnettingInfoLabels) {
+        const labelCell = subnettingTableHeaderRow.insertCell();
+        labelCell.textContent = label;
+    }
+
+    for (let i = 0; i < computedDataObject.subnets.length; i++) {
+        const row = subnettingInfoTable.insertRow();
+        const values = Object.values(computedDataObject.subnets[i]);
+        for (let j = 0; j < values.length; j++) {
+            const cell = row.insertCell();
+            cell.textContent = values[j];
+        }
+    }
+
+    resultContainer.append(resultHeader, initialInfoTable, subnetTableHeader, subnettingInfoTable);
 }
 
 function subnettingFormInit(form) {
@@ -91,9 +128,20 @@ function subnettingFormInit(form) {
     warningMsg.id = 'warningMsgSubnetting';
     form.appendChild(warningMsg);
 
+    // default values
+    networkClassInputs[2].checked = true;
+    hostInput.value = '30';
+    octet1.value = '192';
+    octet2.value = '168';
+    octet3.value = '2';
+    octet4.value = '0';
+    prefixInput.value = '24';
+
     resultButton.addEventListener('click', (e) => {
         e.preventDefault();
         unchild(resultContainer);
+
+        
 
         const emptyChecker = ((networkClassInputs[0].checked == false && networkClassInputs[1].checked == false && networkClassInputs[2].checked == false) || !hostInput.value || !octet1.value || !octet2.value || !octet3.value || !octet4.value || !prefixInput.value);
         
@@ -116,8 +164,6 @@ function subnettingFormInit(form) {
             const ipAddress = [octet1.value, octet2.value, octet3.value, octet4.value].map((x) => parseInt(x));
             const prefix = parseInt(prefixInput.value);
             displayResults(networkClass, hosts, ipAddress, prefix);
-
-            console.log(networkClass, hosts, ipAddress, prefix);
         }
     });
 }

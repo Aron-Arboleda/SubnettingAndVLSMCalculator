@@ -1,8 +1,8 @@
 import * as logic from "./generalLogic.js";
 
-export function doSubnetting(networkClass, hosts, ipAddress, mainPrefix) {
+export function doSubnetting(networkClass, usableHosts, ipAddress, mainPrefix) {
     const IPAddressString = ipAddress.join('.');
-    const [ totalNumberOfHosts, bits ] = logic.getCapacity(hosts);
+    const [ totalNumberOfHosts, bits ] = logic.getCapacity(usableHosts);
     const numberOfUsableHosts = totalNumberOfHosts - 2;
     const newPrefix = logic.getNewPrefix(bits);
     const totalSubnetsCreated = logic.getTotalSubnets(mainPrefix, newPrefix);
@@ -33,4 +33,4 @@ export function doSubnetting(networkClass, hosts, ipAddress, mainPrefix) {
 
 
 
-console.log(doSubnetting('C', 28, [192,168,2,0], 24));
+//console.log(doSubnetting('C', 28, [192,168,2,0], 24));

@@ -6,9 +6,18 @@ export function intToBinary(integer) {
     return integer.toString(2);
 }
 
-export function getCapacity(hosts) {
+export function addBinaryIPAndCapacity(ipv4Address, hostCapacity) {
+    const toBinaryString = ip => ip.split('.').map(octet => parseInt(octet, 10).toString(2).padStart(8, '0')).join('');
+    const binaryIP = toBinaryString(ipv4Address);
+    const binaryCapacity = hostCapacity.toString(2).padStart(32, '0'); // Assuming hostCapacity is an integer
+    const sum = (parseInt(binaryIP, 2) + parseInt(binaryCapacity, 2)) >>> 0;
+    const decimalDotted = sum.toString(2).padStart(32, '0').match(/.{1,8}/g).map(binary => parseInt(binary, 2)).join('.');
+    return decimalDotted;
+}
+
+export function getCapacity(usableHosts) {
     for (let i = 0; i < 32; i++) {
-        if (Math.pow(2, i) >= hosts){
+        if (Math.pow(2, i) - 2 >= usableHosts){
             return [ Math.pow(2, i), i ];
         }
     }
@@ -72,13 +81,6 @@ export function computeSubnets(ipAddress, totalHosts, totalSubnets, subnetMask, 
     return subnets;
 }
 
-export function addBinaryIPAndCapacity(ipv4Address, hostCapacity) {
-    const toBinaryString = ip => ip.split('.').map(octet => parseInt(octet, 10).toString(2).padStart(8, '0')).join('');
-    const binaryIP = toBinaryString(ipv4Address);
-    const binaryCapacity = hostCapacity.toString(2).padStart(32, '0'); // Assuming hostCapacity is an integer
-    const sum = (parseInt(binaryIP, 2) + parseInt(binaryCapacity, 2)) >>> 0;
-    const decimalDotted = sum.toString(2).padStart(32, '0').match(/.{1,8}/g).map(binary => parseInt(binary, 2)).join('.');
-    return decimalDotted;
-}
+
 
 //console.log(computeSubnets('192.168.2.0', 32, 3, '255.255.255.224' ,'/27'));

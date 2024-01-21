@@ -6,11 +6,12 @@ export function computeVLSM(ipAddress, numberOfNetworks, networksArray) {
     for (let i = 0; i < numberOfNetworks; i++) {
         const subnetName = networksArray[i].networkName;
         const neededHosts = networksArray[i].hostsNeeded;
-        const [ totalNumberOfHosts, bits ] = logic.getCapacity(networksArray[i].hostsNeeded);
+        console.log(neededHosts);
+        const [ totalNumberOfHosts, bits ] = logic.getCapacity(neededHosts);
         const availableHosts = totalNumberOfHosts - 2;
         const unusedHosts = availableHosts - neededHosts; 
         const prefix = logic.getNewPrefix(bits);
-        const subnetMask = logic.computeSubnetMask(prefix);
+        const subnetMask = logic.computeSubnetMask(prefix)[0];
 
         const firstUsableHost = logic.addBinaryIPAndCapacity(networkAddress, 1);
         const lastUsableHost = logic.addBinaryIPAndCapacity(networkAddress, totalNumberOfHosts - 2);
@@ -32,7 +33,7 @@ export function doVLSM(numberOfNetworks, ipAddress, mainPrefix, networksArray) {
     const IPType = logic.getIPType(IPAddressString);
     const Short = `${IPAddressString} /${mainPrefix}`;
 
-    const vlsmSubnets = computeVLSM(ipAddress, numberOfNetworks, networksArray);
+    const vlsmSubnets = computeVLSM(IPAddressString, numberOfNetworks, networksArray);
 
     return {
         IPAddressString,

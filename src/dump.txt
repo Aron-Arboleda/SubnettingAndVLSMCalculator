@@ -33,7 +33,9 @@
 
 
 
-
+const sanaol = document.createElement('p');
+sanaol.textContent = 'Made with 💙 by Sanaol';
+numberOfNetworksContainer.appendChild(sanaol);
 
 
 

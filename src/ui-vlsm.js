@@ -3,16 +3,13 @@ import { doVLSM } from "./logic-vlsm.js";
 
 const contentArea = document.querySelector('main div');
 
-const resultContainer = document.createElement('div');
-resultContainer.id = 'resultContainerVLSM';
-
-function displayResults(numberOfNetworks, ipAddress, mainPrefix, networksArray) {
+function displayResults(resultContainer, numberOfNetworks, ipAddress, mainPrefix, networksArray) {
     const resultHeader = document.createElement('h3');
     resultHeader.textContent = 'Results';
     
     const computedDataObject = doVLSM(numberOfNetworks, ipAddress, mainPrefix, networksArray);
     const computedDataValues = Object.values(computedDataObject);
-    const initialInfoLabels = ['IP Address', 'Number of Usable Hosts', 'Main Network Subnet Mask', 'Subnet Mask in Binary', 'IP Class', 'Short Form'];
+    const initialInfoLabels = ['IP Address', 'Number of Usable Hosts', 'Main Network Subnet Mask', 'Subnet Mask in Binary', 'IP Class', 'IP Type', 'Short Form'];
     const initialInfoTable = document.createElement('table');
     initialInfoTable.className = 'resultTables';
 
@@ -38,9 +35,9 @@ function displayResults(numberOfNetworks, ipAddress, mainPrefix, networksArray) 
         labelCell.textContent = label;
     }
 
-    for (let i = 0; i < computedDataObject.subnets.length; i++) {
+    for (let i = 0; i < computedDataObject.vlsmSubnets.length; i++) {
         const row = vlsmInfoTable.insertRow();
-        const values = Object.values(computedDataObject.subnets[i]);
+        const values = Object.values(computedDataObject.vlsmSubnets[i]);
         for (let j = 0; j < values.length; j++) {
             const cell = row.insertCell();
             cell.textContent = values[j];
@@ -63,13 +60,6 @@ function showIfInputIsWrong(emptyChecker, limitChecker, warningMsgElement) {
 function vlsmFormInit(form) {
     const inputContainer = document.createElement('div');
     inputContainer.id = 'inputContainer';
-
-    const resultButton = document.createElement('button');
-    resultButton.className = 'resultButton';
-    resultButton.id = 'resultButtonVLSM';
-    resultButton.type = 'submit';
-    resultButton.textContent = 'Compute and Show Results';
-    resultButton.style.display = 'none';
 
     const ipAddressLabel = document.createElement('label');
     ipAddressLabel.textContent = 'IP Address';
@@ -128,19 +118,16 @@ function vlsmFormInit(form) {
     warningMsg1.id = 'warningMsg1VLSM';
     form.appendChild(warningMsg1);
     
-    const numberOfNetworksContainer = document.createElement('div');
-    const numberOfNetworksInputTable = document.createElement('table');
-    
     
 
-    const listOfInputs = [];
+    const subContainerForContinue = document.createElement('div');
+    subContainerForContinue.id = 'subContainerForContinue';
 
-    const emptyChecker = true;
-    const limitChecker = true;
     // eslint-disable-next-line no-unused-vars
     nextButton.addEventListener('click', (e) => { 
         e.preventDefault();
-        unchild(numberOfNetworksContainer);
+        unchild(subContainerForContinue);
+        
         
         const emptyChecker = (!numberOfNetworksInput.value || !octet1.value || !octet2.value || !octet3.value || !octet4.value || !prefixInput.value);
         
@@ -150,11 +137,14 @@ function vlsmFormInit(form) {
         showIfInputIsWrong(emptyChecker, limitChecker, warningMsg1);
 
         if (warningMsg1.innerHTML === ''){
+            const numberOfNetworksInputTable = document.createElement('table');
             const headerRow = numberOfNetworksInputTable.insertRow();
             const networknameHeaderCell = headerRow.insertCell();
             networknameHeaderCell.textContent = 'Network Name';
             const networkHostsNeededHeaderCell = headerRow.insertCell();
             networkHostsNeededHeaderCell.textContent = 'Number of Usable Hosts Needed';
+            
+            const listOfInputs = [];
             
             for (let i = 0; i < parseInt(numberOfNetworksInput.value); i++) {
                 const row = numberOfNetworksInputTable.insertRow();
@@ -170,49 +160,66 @@ function vlsmFormInit(form) {
 
                 listOfInputs.push({networkNameInput, networkNHostsNeededInput});
             }
-            resultButton.style.display = 'block';
+            subContainerForContinue.appendChild(numberOfNetworksInputTable);
 
-            const sanaol = document.createElement('p');
-            sanaol.textContent = 'Made with 💙 by Sanaol';
-            numberOfNetworksContainer.appendChild(sanaol);
-            numberOfNetworksContainer.appendChild(numberOfNetworksInputTable);
-            form.appendChild(numberOfNetworksContainer);
+            const warningMsg2 = document.createElement('p');
+            warningMsg2.className = 'warningMsg';
+            warningMsg2.id = 'warningMsg2VLSM';
+            subContainerForContinue.appendChild(warningMsg2);
+
+            const resultButton = document.createElement('button');
+            resultButton.className = 'resultButton';
+            resultButton.id = 'resultButtonVLSM';
+            resultButton.type = 'submit';
+            resultButton.textContent = 'Compute and Show Results';
+
+            const resultContainer = document.createElement('div');
+            resultContainer.id = 'resultContainerVLSM';
+
+            resultButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                unchild(resultContainer);
+                
+                const emptyChecker = (!numberOfNetworksInput.value || !octet1.value || !octet2.value || !octet3.value || !octet4.value || !prefixInput.value);
+        
+                const limitChecker = (parseInt(numberOfNetworksInput.value) > 500 || parseInt(numberOfNetworksInput.value) < 2) || (prefixInput.value > 30 || prefixInput.value < 0) || 
+                [octet1, octet2, octet3, octet4].some(x => x.value > 255 || x.value < 0);
+
+                showIfInputIsWrong(emptyChecker, limitChecker, warningMsg2);
+        
+                if (warningMsg2.innerHTML === ''){
+        
+                    const numberOfNetworks = parseInt(numberOfNetworksInput.value);
+                    const ipAddress = [octet1.value, octet2.value, octet3.value, octet4.value].map((x) => parseInt(x));
+                    const mainPrefix = parseInt(prefixInput.value);
+                    const networksArray = listOfInputs.map(({ networkNameInput, networkNHostsNeededInput }) => ({
+                        networkName: networkNameInput.value,
+                        hostsNeeded: parseInt(networkNHostsNeededInput.value)
+                    }));
+                    displayResults(resultContainer, numberOfNetworks, ipAddress, mainPrefix, networksArray);
+                }
+            });
+            subContainerForContinue.appendChild(resultButton);
+
+            subContainerForContinue.appendChild(resultContainer);
+            
         }
     });
 
-    form.appendChild(resultButton);
+    form.appendChild(subContainerForContinue);
 
-    const warningMsg2 = document.createElement('p');
-    warningMsg2.className = 'warningMsg';
-    warningMsg2.id = 'warningMsg2VLSM';
-    form.appendChild(warningMsg2);
+    
 
+    
     // default values for testing
-    numberOfNetworksInput.value = '30';
+    numberOfNetworksInput.value = '4';
     octet1.value = '192';
     octet2.value = '168';
     octet3.value = '2';
     octet4.value = '0';
     prefixInput.value = '24';
 
-    resultButton.addEventListener('click', (e) => {
-        e.preventDefault();
-        unchild(resultContainer);
-
-        showIfInputIsWrong(emptyChecker, limitChecker, warningMsg2);
-
-        if (warningMsg2.innerHTML === ''){
-
-            const numberOfNetworks = parseInt(numberOfNetworksInput.value);
-            const ipAddress = [octet1.value, octet2.value, octet3.value, octet4.value].map((x) => parseInt(x));
-            const mainPrefix = parseInt(prefixInput.value);
-            const networksArray = listOfInputs.map(({ networkNameInput, networkNHostsNeededInput }) => ({
-                networkName: networkNameInput.value,
-                hostsNeeded: parseInt(networkNHostsNeededInput.value)
-            }));
-            displayResults(numberOfNetworks, ipAddress, mainPrefix, networksArray);
-        }
-    });
+    
 
     
 }
@@ -232,7 +239,7 @@ export function VLSMInit() {
     vlsmFormInit(form);
 
     
-    contentArea.append(title, context, calculatorTitle, form, resultContainer);
+    contentArea.append(title, context, calculatorTitle, form);
 }
 
 

@@ -63,22 +63,14 @@ export function getIPType(ipv4Address) {
     return privateRanges.some(regex => regex.test(ipv4Address)) ? 'Private' : 'Public';
 }
 
-
-
-export function computeSubnets(ipAddress, totalHosts, totalSubnets, subnetMask, prefix) {
-    const subnets = [];
-    const numberOfUsableHosts = totalHosts - 2;
-    let networkAddress = ipAddress;
-    for (let i = 0; i < totalSubnets; i++) {
-        const subnet = `S${i}`;
-        const firstUsableHost = addBinaryIPAndCapacity(networkAddress, 1);
-        const lastUsableHost = addBinaryIPAndCapacity(networkAddress, totalHosts - 2);
-        const broadcastAddress = addBinaryIPAndCapacity(networkAddress, totalHosts - 1);
-        
-        subnets.push({ subnet, networkAddress, firstUsableHost, lastUsableHost, broadcastAddress, numberOfUsableHosts, subnetMask, prefix});
-        networkAddress = addBinaryIPAndCapacity(broadcastAddress, 1);
+export function getNetworkClass(prefix) {
+    if (prefix >= 0 && prefix <= 15) {
+        return 'A';
+    } else if (prefix >= 16 && prefix <= 23) {
+        return 'B';
+    } else if (prefix >= 24 && prefix <= 30) {
+        return 'C';
     }
-    return subnets;
 }
 
 

@@ -1,0 +1,46 @@
+@import url("./generalStyles.css");
+
+#subContainerForContinue {
+    width: 100%;
+}
+
+#numberOfNetworksInputTable {
+    border-collapse: collapse;
+    margin: 20px auto;
+    background-color: #f9f9f9;
+    margin-top: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    font-size: 15px;
+    border-radius: 5px;
+    padding: 25px;
+}
+
+#numberOfNetworksInputTable th,
+#numberOfNetworksInputTable td {
+    text-align: center;
+    padding: 8px;
+}
+
+
+#numberOfNetworksInputTable tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.hostTableInput {
+    width: 100px;
+    margin: 0px 15px;
+}
+
+#numberOfNetworksInputTable td:nth-child(odd) {
+    padding-left: 20px;
+}
+#numberOfNetworksInputTable td:nth-child(even) {
+    width: 120px;
+}
+
+#numberOfNetworksInputTable tr:hover {
+    background-color: #ddd;
+}
+
+
+

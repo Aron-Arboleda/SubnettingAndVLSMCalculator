@@ -72,6 +72,7 @@ function vlsmFormInit(form) {
       input.type = 'number';
       input.min = '0';
       input.max = '255';
+      input.className = 'inputfield numberInput octetInput';
       ipAddressDiv.appendChild(input);
       ipAddressOctetsInputs.push(input);
       if (i < 3) {
@@ -88,6 +89,7 @@ function vlsmFormInit(form) {
     prefixInput.type = 'number';
     prefixInput.min = '0';
     prefixInput.max = '32';
+    prefixInput.className = 'inputfield numberInput prefixInput';
     ipAddressDiv.appendChild(prefixInput);
 
     const [ octet1, octet2, octet3, octet4 ] = ipAddressOctetsInputs;
@@ -103,15 +105,16 @@ function vlsmFormInit(form) {
     numberOfNetworksLabel.placeholder = '500 is the maximum';
     numberOfNetworksInput.min = '2';
     numberOfNetworksInput.max = '500';
+    numberOfNetworksInput.className = 'inputfield numberInput';
     inputContainer.appendChild(numberOfNetworksInput);
 
     form.appendChild(inputContainer);
 
-    const nextButton = document.createElement('button');
-    nextButton.className = 'nextButton';
-    nextButton.id = 'nextButtonVLSM';
-    nextButton.textContent = 'Continue';
-    form.appendChild(nextButton);
+    const continueButton = document.createElement('button');
+    continueButton.className = 'proceedButtons';
+    continueButton.id = 'continueButtonVLSM';
+    continueButton.textContent = 'Continue';
+    form.appendChild(continueButton);
 
     const warningMsg1 = document.createElement('p');
     warningMsg1.className = 'warningMsg';
@@ -124,7 +127,7 @@ function vlsmFormInit(form) {
     subContainerForContinue.id = 'subContainerForContinue';
 
     // eslint-disable-next-line no-unused-vars
-    nextButton.addEventListener('click', (e) => { 
+    continueButton.addEventListener('click', (e) => { 
         e.preventDefault();
         unchild(subContainerForContinue);
         
@@ -138,11 +141,13 @@ function vlsmFormInit(form) {
 
         if (warningMsg1.innerHTML === ''){
             const numberOfNetworksInputTable = document.createElement('table');
+            numberOfNetworksInputTable.id = 'numberOfNetworksInputTable';
             const headerRow = numberOfNetworksInputTable.insertRow();
+            headerRow.className = 'headerRow';
             const networknameHeaderCell = headerRow.insertCell();
             networknameHeaderCell.textContent = 'Network Name';
             const networkHostsNeededHeaderCell = headerRow.insertCell();
-            networkHostsNeededHeaderCell.textContent = 'Number of Usable Hosts Needed';
+            networkHostsNeededHeaderCell.textContent = 'Usable Hosts Needed';
             
             const listOfInputs = [];
             
@@ -151,11 +156,13 @@ function vlsmFormInit(form) {
                 const networkNameInput = document.createElement('input');
                 networkNameInput.type = 'text';
                 networkNameInput.value = `Network ${i+1}`;
+                networkNameInput.className = 'inputfield textInput';
                 row.insertCell().appendChild(networkNameInput);
     
                 const networkNHostsNeededInput = document.createElement('input');
                 networkNHostsNeededInput.type = 'number';
                 networkNHostsNeededInput.placeholder = `Hosts`; 
+                networkNHostsNeededInput.className = 'inputfield numberInput hostTableInput';
                 row.insertCell().appendChild(networkNHostsNeededInput);
 
                 listOfInputs.push({networkNameInput, networkNHostsNeededInput});
@@ -168,7 +175,7 @@ function vlsmFormInit(form) {
             subContainerForContinue.appendChild(warningMsg2);
 
             const resultButton = document.createElement('button');
-            resultButton.className = 'resultButton';
+            resultButton.className = 'proceedButtons';
             resultButton.id = 'resultButtonVLSM';
             resultButton.type = 'submit';
             resultButton.textContent = 'Compute and Show Results';

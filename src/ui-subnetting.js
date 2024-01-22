@@ -58,16 +58,20 @@ function subnettingFormInit(form) {
     inputContainer.appendChild(networkClassLabel);
 
     const networkClassDiv = document.createElement('div');
+    networkClassDiv.id = 'networkClassDiv';
     const networkClassInputs = ['A', 'B', 'C'].map((labelText) => {
-      const input = document.createElement('input');
-      input.type = 'radio';
-      input.name = 'abc';
-      input.value = labelText;
-      const label = document.createElement('label');
-      label.textContent = labelText;
-      networkClassDiv.appendChild(input);
-      networkClassDiv.appendChild(label);
-      return input;
+        const radioButtonContainer = document.createElement('div');
+        const input = document.createElement('input');
+        input.type = 'radio';
+        input.name = 'abc';
+        input.value = labelText;
+        input.className = 'radioButton';
+        const label = document.createElement('label');
+        label.textContent = labelText;
+        radioButtonContainer.appendChild(input);
+        radioButtonContainer.appendChild(label);
+        networkClassDiv.appendChild(radioButtonContainer);
+        return input;
     });
     inputContainer.appendChild(networkClassDiv);
 
@@ -79,10 +83,11 @@ function subnettingFormInit(form) {
     hostInput.type = 'number';
     hostInput.min = '2';
     hostInput.max = '2147483648';
+    hostInput.className = 'inputfield numberInput';
     inputContainer.appendChild(hostInput);
 
     const ipAddressLabel = document.createElement('label');
-    ipAddressLabel.textContent = 'IP Address';
+    ipAddressLabel.textContent = 'Main IP Address';
     inputContainer.appendChild(ipAddressLabel);
 
     const ipAddressDiv = document.createElement('div');
@@ -92,6 +97,7 @@ function subnettingFormInit(form) {
       input.type = 'number';
       input.min = '0';
       input.max = '255';
+      input.className = 'inputfield numberInput octetInput';
       ipAddressDiv.appendChild(input);
       ipAddressOctetsInputs.push(input);
       if (i < 3) {
@@ -108,6 +114,7 @@ function subnettingFormInit(form) {
     prefixInput.type = 'number';
     prefixInput.min = '0';
     prefixInput.max = '32';
+    prefixInput.className = 'inputfield numberInput prefixInput';
     ipAddressDiv.appendChild(prefixInput);
 
     const [ octet1, octet2, octet3, octet4 ] = ipAddressOctetsInputs;
@@ -117,7 +124,7 @@ function subnettingFormInit(form) {
     form.appendChild(inputContainer);
 
     const resultButton = document.createElement('button');
-    resultButton.className = 'resultButton';
+    resultButton.className = 'proceedButtons';
     resultButton.id = 'resultButtonSubnetting';
     resultButton.type = 'submit';
     resultButton.textContent = 'Compute and Show Results';

@@ -4,8 +4,10 @@
 	--page-color: #F4F2EF;
     --text-color: #050A0F;
     --text-color-darkmode: #F4F2EF;
+    --light-highlight-color: #f3c7a4;
     --highlight-color: #E6863A;
     --button-color: #213E60;
+    --table-header-color: #bad0f5;
     --element-background-color: #bad0f5;
 }
 
@@ -94,4 +96,44 @@ aside button:hover {
     font-style: italic;
     margin: 0px auto;
 }
+
+.inputfield {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    color: #333;
+    background-color: #f8f8f8;
+    margin: 2px 0px;
+}
+
+.octetInput,
+.prefixInput {
+    width: 62px;
+    text-align: center;
+}
+
+.inputfield:focus {
+    outline: none;
+    border: 2px solid var(--highlight-color);
+    margin: 1px 0px;
+}
+
+.radioButton {
+    appearance: none;
+    background-color: #f0f0f0;
+    margin: 0 5px 0 0;
+    color: var(--text-color);
+    width: 14px;
+    height: 14px;
+    border: 2px solid var(--button-color);
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.radioButton:checked {
+    border: 2px solid var(--highlight-color);
+    background-color: var(--light-highlight-color);
+}
+
 

@@ -1,11 +1,80 @@
 import { unchild } from "./index.js";
 import { doSubnetting } from "./logic-subnetting.js";
+import * as logic from "./generalLogic.js";
 
 const contentArea = document.querySelector('main div');
 
 const resultContainer = document.createElement('div');
 resultContainer.id = 'resultContainerSubnetting';
 
+export function validityCheckerSubnetting(arrayOfInputs) {
+    const [ radioButtonA, radioButtonB, radioButtonC, hostInput, octet1, octet2, octet3, octet4, prefixInput ] = arrayOfInputs;
+
+
+    let classType = '';
+    for (const radioButton of [radioButtonA, radioButtonB, radioButtonC]) {
+        if (radioButton.checked) {
+            classType = radioButton.value;
+        }
+    }
+
+    let valid = true;
+    let message = '';
+    let wrongInputFields = [];
+
+    const hostInputValue = parseInt(hostInput.value);
+    const prefixInputValue = parseInt(prefixInput.value);
+
+    if (classType === 'A'){
+        if (hostInputValue > 2147483646 || hostInputValue < 2){
+            wrongInputFields.push(hostInput);
+        }
+        
+        if (prefixInputValue < 1 || prefixInputValue.value > 30) {
+            wrongInputFields.push(prefixInput);
+        }
+    } else if (classType === 'B'){
+        if (hostInputValue > 32766 || hostInputValue < 2){
+            wrongInputFields.push(hostInput);
+        }
+        
+        if (prefixInputValue < 16 || prefixInputValue.value > 30) {
+            wrongInputFields.push(prefixInput);
+        }
+    } else if (classType === 'C'){
+        if (hostInputValue > 126 || hostInputValue < 2){
+            wrongInputFields.push(hostInput);
+        }
+        
+        if (prefixInputValue < 24 || prefixInputValue.value > 30) {
+            wrongInputFields.push(prefixInput);
+        }
+    } 
+
+    for (const octetInput of [octet1, octet2, octet3, octet4]){
+        const value = parseInt(octetInput.value);
+        if (value > 255 || value < 0){
+            wrongInputFields.push(octetInput);
+        }
+    }
+
+
+    if (hostInputValue > logic.totalHostsOfNetwork(prefixInputValue) - 2){
+        if (!(wrongInputFields.includes(hostInput))){
+            wrongInputFields.push(hostInput);
+            valid = false;
+            message = `*The inputted /${prefixInput.value} network has only ${logic.totalHostsOfNetwork(parseInt(prefixInput.value)) - 2} usable hosts`;
+        }
+    }
+
+    if (wrongInputFields.length > 0){
+        valid = false;
+    }
+
+    message = (valid == false && message === '') ? '*Please double check your inputs.' : message;
+    
+    return [ valid, message, wrongInputFields ];
+}
 function displayResults(networkClass, usableHosts, ipAddress, prefix) {
     const resultHeader = document.createElement('h3');
     resultHeader.textContent = 'Results';
@@ -147,25 +216,22 @@ function subnettingFormInit(form) {
     resultButton.addEventListener('click', (e) => {
         e.preventDefault();
         unchild(resultContainer);
-
-        
-
-        const emptyChecker = ((networkClassInputs[0].checked == false && networkClassInputs[1].checked == false && networkClassInputs[2].checked == false) || !hostInput.value || !octet1.value || !octet2.value || !octet3.value || !octet4.value || !prefixInput.value);
-        
-        const limitChecker = (hostInput.value > 2147483648 || hostInput.value < 2) || (prefixInput.value > 30 || prefixInput.value < 0) || 
-        [octet1, octet2, octet3, octet4].some((x) => {
-            return (x.value > 255 || x.value < 0);
-        });
-        
-        if (emptyChecker){
-            warningMsg.innerHTML = '*All fields are required';
-        } else if (limitChecker) {
-            warningMsg.innerHTML = '*Please enter valid IP address / hosts needed';
-        } else {
-            warningMsg.innerHTML = '';
+        for (const input of document.querySelectorAll('input[type="number"]')) {
+            input.classList.remove('wrongInput');
         }
 
-        if (warningMsg.innerHTML === ''){
+        const [ valid, message, wrongInputFields ] = validityCheckerSubnetting(document.querySelectorAll('input'));
+        
+        warningMsg.textContent = message;
+        
+        wrongInputFields.forEach((input) => {
+            input.classList.add('wrongInput');
+        });
+
+        if (valid){
+            for (const input of document.querySelectorAll('input[type="number"]')) {
+                input.classList.remove('wrongInput');
+            }
             const networkClass = networkClassInputs.filter((input) => input.checked)[0].value;
             const hosts = parseInt(hostInput.value);
             const ipAddress = [octet1.value, octet2.value, octet3.value, octet4.value].map((x) => parseInt(x));

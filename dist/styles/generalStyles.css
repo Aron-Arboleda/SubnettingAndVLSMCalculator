@@ -6,6 +6,7 @@
     --text-color-darkmode: #F4F2EF;
     --light-highlight-color: #f3c7a4;
     --highlight-color: #E6863A;
+    --wrong-input-color: rgb(233, 80, 80);
     --button-color: #213E60;
     --table-header-color: #bad0f5;
     --element-background-color: #bad0f5;
@@ -119,6 +120,10 @@ aside button:hover {
     margin: 1px 0px;
 }
 
+.wrongInput {
+    border: 1px solid var(--wrong-input-color);
+}
+
 .radioButton {
     appearance: none;
     background-color: #f0f0f0;
@@ -129,6 +134,7 @@ aside button:hover {
     border: 2px solid var(--button-color);
     border-radius: 50%;
     display: inline-block;
+    cursor: pointer;
 }
 
 .radioButton:checked {

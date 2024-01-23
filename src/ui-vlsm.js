@@ -102,10 +102,11 @@ function vlsmFormInit(form) {
 
     const numberOfNetworksInput = document.createElement('input');
     numberOfNetworksInput.type = 'number';
-    numberOfNetworksLabel.placeholder = '500 is the maximum';
+    numberOfNetworksInput.placeholder = '(500 max)';
     numberOfNetworksInput.min = '2';
     numberOfNetworksInput.max = '500';
     numberOfNetworksInput.className = 'inputfield numberInput';
+
     inputContainer.appendChild(numberOfNetworksInput);
 
     form.appendChild(inputContainer);
@@ -126,7 +127,6 @@ function vlsmFormInit(form) {
     const subContainerForContinue = document.createElement('div');
     subContainerForContinue.id = 'subContainerForContinue';
 
-    // eslint-disable-next-line no-unused-vars
     continueButton.addEventListener('click', (e) => { 
         e.preventDefault();
         unchild(subContainerForContinue);

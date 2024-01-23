@@ -23,6 +23,10 @@ export function getCapacity(usableHosts) {
     }
 }
 
+export function totalHostsOfNetwork(mainPrefix) {
+    return Math.pow(2, 32 - mainPrefix);
+}
+
 export function getTotalSubnets(mainNetworkPrefix, subnetPrefix) {
     return Math.pow(2, subnetPrefix - mainNetworkPrefix);
 }

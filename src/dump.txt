@@ -39,7 +39,27 @@ numberOfNetworksContainer.appendChild(sanaol);
 
 
 
+const empty = ((networkClassInputs[0].checked == false && networkClassInputs[1].checked == false && networkClassInputs[2].checked == false) || !hostInput.value || !octet1.value || !octet2.value || !octet3.value || !octet4.value || !prefixInput.value);
+        
+    const exceedsLimit = (parseInt(hostInput.value) > 2147483648 || hostInput.value < 2) || (parseInt(prefixInput.value) > 30 || parseInt(prefixInput.value) < 0) || 
+    [octet1, octet2, octet3, octet4].some((x) => {
+        return (x.value > 255 || x.value < 0);
+    });
 
+    let notValid = false;
+    if (parseInt(hostInput.value) > logic.totalHostsOfNetwork(parseInt(prefixInput.value)) - 2){
+        notValid = true;
+    }
+    
+    if (empty){
+        warningMsg.innerHTML = '*All fields are required';
+    } else if (exceedsLimit) {
+        warningMsg.innerHTML = '*Please enter valid IP address';
+    } else if (notValid) {
+        warningMsg.innerHTML = `*The inputted /${prefixInput.value} network has only ${logic.totalHostsOfNetwork(parseInt(prefixInput.value)) - 2} usable hosts`;
+    } else {
+        warningMsg.innerHTML = '';
+    }
 
 
 /** 

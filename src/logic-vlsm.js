@@ -27,7 +27,7 @@ export function computeVLSM(ipAddress, numberOfNetworks, networksArray) {
 
 export function doVLSM(numberOfNetworks, ipAddress, mainPrefix, networksArray) {
     const IPAddressString = ipAddress.join('.');
-    const numberOfUsableHostsOfNetwork = Math.pow(2, 32 - mainPrefix) - 2;
+    const numberOfUsableHostsOfNetwork = logic.totalHostsOfNetwork(mainPrefix) - 2;
     const [mainSubnetMask, mainSubnetMaskBinary] = logic.computeSubnetMask(mainPrefix);
     const IPclass = logic.getNetworkClass(mainPrefix);
     const IPType = logic.getIPType(IPAddressString);

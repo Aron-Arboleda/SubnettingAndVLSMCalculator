@@ -10,7 +10,6 @@ resultContainer.id = 'resultContainerSubnetting';
 export function validityCheckerSubnetting(arrayOfInputs) {
     const [ radioButtonA, radioButtonB, radioButtonC, hostInput, octet1, octet2, octet3, octet4, prefixInput ] = arrayOfInputs;
 
-
     let classType = '';
     for (const radioButton of [radioButtonA, radioButtonB, radioButtonC]) {
         if (radioButton.checked) {
@@ -75,6 +74,7 @@ export function validityCheckerSubnetting(arrayOfInputs) {
     
     return [ valid, message, wrongInputFields ];
 }
+
 function displayResults(networkClass, usableHosts, ipAddress, prefix) {
     const resultHeader = document.createElement('h3');
     resultHeader.textContent = 'Results';

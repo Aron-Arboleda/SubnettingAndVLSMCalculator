@@ -3,6 +3,41 @@ import { doVLSM } from "./logic-vlsm.js";
 
 const contentArea = document.querySelector('main div');
 
+export function validityCheckerVLSM1(arrayOfInputs) {
+    const [ octet1, octet2, octet3, octet4, prefixInput, hostInput ] = arrayOfInputs;
+
+    let valid = true;
+    let message = '';
+    let wrongInputFields = [];
+
+    const hostInputValue = parseInt(hostInput.value);
+    const prefixInputValue = parseInt(prefixInput.value);
+    console.log(prefixInput);
+
+    for (const octetInput of [octet1, octet2, octet3, octet4]){
+        const value = parseInt(octetInput.value);
+        if (value > 255 || value < 0){
+            wrongInputFields.push(octetInput);
+        }
+    }
+
+    if (prefixInputValue < 1 || prefixInputValue > 30) {
+        wrongInputFields.push(prefixInput);
+    }
+
+    if (hostInputValue < 2 || hostInputValue > 500){
+        wrongInputFields.push(hostInput);
+    }
+
+    if (wrongInputFields.length > 0){
+        valid = false;
+    }
+
+    message = (valid == false && message === '') ? '*Please double check your inputs.' : message;
+    
+    console.log(wrongInputFields);
+    return [ valid, message, wrongInputFields ];
+}
 function displayResults(resultContainer, numberOfNetworks, ipAddress, mainPrefix, networksArray) {
     const resultHeader = document.createElement('h3');
     resultHeader.textContent = 'Results';
@@ -45,16 +80,6 @@ function displayResults(resultContainer, numberOfNetworks, ipAddress, mainPrefix
     }
 
     resultContainer.append(resultHeader, initialInfoTable, vlsmTableHeader, vlsmInfoTable);
-}
-
-function showIfInputIsWrong(emptyChecker, limitChecker, warningMsgElement) {
-    if (emptyChecker){
-        warningMsgElement.innerHTML = '*All fields are required';
-    } else if (limitChecker) {
-        warningMsgElement.innerHTML = '*Please enter valid IP address / hosts needed';
-    } else {
-        warningMsgElement.innerHTML = '';
-    }
 }
 
 function vlsmFormInit(form) {
@@ -130,16 +155,23 @@ function vlsmFormInit(form) {
     continueButton.addEventListener('click', (e) => { 
         e.preventDefault();
         unchild(subContainerForContinue);
-        
-        
-        const emptyChecker = (!numberOfNetworksInput.value || !octet1.value || !octet2.value || !octet3.value || !octet4.value || !prefixInput.value);
-        
-        const limitChecker = (parseInt(numberOfNetworksInput.value) > 500 || parseInt(numberOfNetworksInput.value) < 2) || (prefixInput.value > 30 || prefixInput.value < 0) || 
-        [octet1, octet2, octet3, octet4].some(x => x.value > 255 || x.value < 0);
 
-        showIfInputIsWrong(emptyChecker, limitChecker, warningMsg1);
+        for (const input of document.querySelectorAll('input[type="number"]')) {
+            input.classList.remove('wrongInput');
+        }
 
-        if (warningMsg1.innerHTML === ''){
+        const [ valid, message, wrongInputFields ] = validityCheckerVLSM1(document.querySelectorAll('input[type="number"]'));
+        
+        warningMsg1.textContent = message;
+        
+        wrongInputFields.forEach((input) => {
+            input.classList.add('wrongInput');
+        });
+
+        if (valid){
+            for (const input of document.querySelectorAll('input[type="number"]')) {
+                input.classList.remove('wrongInput');
+            }
             const numberOfNetworksInputTable = document.createElement('table');
             numberOfNetworksInputTable.id = 'numberOfNetworksInputTable';
             const headerRow = numberOfNetworksInputTable.insertRow();

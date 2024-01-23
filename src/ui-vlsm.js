@@ -219,12 +219,7 @@ function vlsmFormInit(form) {
                 e.preventDefault();
                 unchild(resultContainer);
                 
-                const emptyChecker = (!numberOfNetworksInput.value || !octet1.value || !octet2.value || !octet3.value || !octet4.value || !prefixInput.value);
-        
-                const limitChecker = (parseInt(numberOfNetworksInput.value) > 500 || parseInt(numberOfNetworksInput.value) < 2) || (prefixInput.value > 30 || prefixInput.value < 0) || 
-                [octet1, octet2, octet3, octet4].some(x => x.value > 255 || x.value < 0);
-
-                showIfInputIsWrong(emptyChecker, limitChecker, warningMsg2);
+                //checking if all inputs are valid here
         
                 if (warningMsg2.innerHTML === ''){
         

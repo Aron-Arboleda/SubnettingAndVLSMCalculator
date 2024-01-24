@@ -1,42 +1,97 @@
 import { unchild } from "./index.js";
 import { doVLSM } from "./logic-vlsm.js";
+import * as logic from "./generalLogic.js";
 
 const contentArea = document.querySelector('main div');
 
-export function validityCheckerVLSM1(arrayOfInputs) {
-    const [ octet1, octet2, octet3, octet4, prefixInput, hostInput ] = arrayOfInputs;
+export function validityCheckerVLSM1(arrayOfInputs, warningMsgElem) {
+    const [ octet1, octet2, octet3, octet4, prefixInput, totalSubnetsInput ] = arrayOfInputs;
 
     let valid = true;
     let message = '';
     let wrongInputFields = [];
 
-    const hostInputValue = parseInt(hostInput.value);
+    const totalSubnetsInputValue = parseInt(totalSubnetsInput.value);
     const prefixInputValue = parseInt(prefixInput.value);
-    console.log(prefixInput);
 
     for (const octetInput of [octet1, octet2, octet3, octet4]){
         const value = parseInt(octetInput.value);
-        if (value > 255 || value < 0){
+        if ((value > 255 || value < 0) || isNaN(value)) {
             wrongInputFields.push(octetInput);
         }
     }
 
-    if (prefixInputValue < 1 || prefixInputValue > 30) {
+    if ((prefixInputValue < 1 || prefixInputValue > 30) || isNaN(prefixInputValue)) {
         wrongInputFields.push(prefixInput);
     }
 
-    if (hostInputValue < 2 || hostInputValue > 500){
-        wrongInputFields.push(hostInput);
+    if ((totalSubnetsInputValue < 2 || totalSubnetsInputValue > 500) || isNaN(totalSubnetsInputValue)) {
+        wrongInputFields.push(totalSubnetsInput);
+    }
+
+    if (totalSubnetsInputValue > Math.pow(2, 32 - prefixInputValue - 2)){
+        if (!(wrongInputFields.includes(totalSubnetsInput))){
+            wrongInputFields.push(totalSubnetsInput);
+            valid = false;
+            message = `*The inputted /${prefixInput.value} network has only ${Math.pow(2, 32 - prefixInputValue - 2)} subnet capacity`;
+        }
     }
 
     if (wrongInputFields.length > 0){
         valid = false;
     }
 
-    message = (valid == false && message === '') ? '*Please double check your inputs.' : message;
+    message = (valid == false && message === '') ? '*Please double check your inputs. *All fields are required' : message;
+    
+    warningMsgElem.textContent = message;
+    wrongInputFields.forEach((input) => {
+        input.classList.add('wrongInput');
+    });
+
+    return valid;
+}
+
+
+export function validityCheckerVLSM2(prefixInput, hostInputs, warningMsgElem) {
+    let valid = true;
+    let message = '';
+    let wrongInputFields = [];
+
+    const prefixInputValue = parseInt(prefixInput.value);
+
+    hostInputs.forEach((hostInput) => {
+        if ((parseInt(hostInput.value) > logic.totalHostsOfNetwork(prefixInputValue) - 2) || hostInput.value === ''){
+            wrongInputFields.push(hostInput);
+            valid = false;
+        }
+    });
+
+    if (valid){
+        const hostInputsValues = Array.from(hostInputs).map(input => parseInt(input.value));
+        const capacities = hostInputsValues.map(value => logic.getCapacity(value)[0]);
+        const sum = capacities.reduce((a, b) => a + b);
+
+        if (sum > logic.totalHostsOfNetwork(parseInt(prefixInput.value))){
+            valid = false;
+            message = `*The inputted /${prefixInput.value} network has only ${logic.totalHostsOfNetwork(parseInt(prefixInput.value))} total hosts. The computed sum of total hosts needed for the values above are ${sum}.`;
+        }
+    }
+    
+    message = (valid == false && message === '') ? '*Please double check your inputs. *All fields are required.' : message;
     
     console.log(wrongInputFields);
-    return [ valid, message, wrongInputFields ];
+    warningMsgElem.textContent = message;
+    wrongInputFields.forEach((input) => {
+        input.classList.add('wrongInput');
+    });
+
+    return valid;
+}
+
+export function removeRedBorders(arrayOfInputElements) {
+    for (const input of arrayOfInputElements) {
+        input.classList.remove('wrongInput');
+    }
 }
 function displayResults(resultContainer, numberOfNetworks, ipAddress, mainPrefix, networksArray) {
     const resultHeader = document.createElement('h3');
@@ -97,7 +152,7 @@ function vlsmFormInit(form) {
       input.type = 'number';
       input.min = '0';
       input.max = '255';
-      input.className = 'inputfield numberInput octetInput';
+      input.className = 'inputfield numberInput octetInput initialElement';
       ipAddressDiv.appendChild(input);
       ipAddressOctetsInputs.push(input);
       if (i < 3) {
@@ -112,9 +167,9 @@ function vlsmFormInit(form) {
 
     const prefixInput = document.createElement('input');
     prefixInput.type = 'number';
-    prefixInput.min = '0';
-    prefixInput.max = '32';
-    prefixInput.className = 'inputfield numberInput prefixInput';
+    prefixInput.min = '1';
+    prefixInput.max = '30';
+    prefixInput.className = 'inputfield numberInput prefixInput initialElement';
     ipAddressDiv.appendChild(prefixInput);
 
     const [ octet1, octet2, octet3, octet4 ] = ipAddressOctetsInputs;
@@ -130,7 +185,7 @@ function vlsmFormInit(form) {
     numberOfNetworksInput.placeholder = '(500 max)';
     numberOfNetworksInput.min = '2';
     numberOfNetworksInput.max = '500';
-    numberOfNetworksInput.className = 'inputfield numberInput';
+    numberOfNetworksInput.className = 'inputfield numberInput initialElement';
 
     inputContainer.appendChild(numberOfNetworksInput);
 
@@ -156,22 +211,13 @@ function vlsmFormInit(form) {
         e.preventDefault();
         unchild(subContainerForContinue);
 
-        for (const input of document.querySelectorAll('input[type="number"]')) {
-            input.classList.remove('wrongInput');
-        }
+        removeRedBorders(document.querySelectorAll('input[type="number"]'));
 
-        const [ valid, message, wrongInputFields ] = validityCheckerVLSM1(document.querySelectorAll('input[type="number"]'));
-        
-        warningMsg1.textContent = message;
-        
-        wrongInputFields.forEach((input) => {
-            input.classList.add('wrongInput');
-        });
+        const valid = validityCheckerVLSM1(document.querySelectorAll('input[type="number"]'), warningMsg1);
 
         if (valid){
-            for (const input of document.querySelectorAll('input[type="number"]')) {
-                input.classList.remove('wrongInput');
-            }
+            removeRedBorders(document.querySelectorAll('input[type="number"]'));
+
             const numberOfNetworksInputTable = document.createElement('table');
             numberOfNetworksInputTable.id = 'numberOfNetworksInputTable';
             const headerRow = numberOfNetworksInputTable.insertRow();
@@ -188,13 +234,13 @@ function vlsmFormInit(form) {
                 const networkNameInput = document.createElement('input');
                 networkNameInput.type = 'text';
                 networkNameInput.value = `Network ${i+1}`;
-                networkNameInput.className = 'inputfield textInput';
+                networkNameInput.className = 'inputfield textInput subElement';
                 row.insertCell().appendChild(networkNameInput);
     
                 const networkNHostsNeededInput = document.createElement('input');
                 networkNHostsNeededInput.type = 'number';
                 networkNHostsNeededInput.placeholder = `Hosts`; 
-                networkNHostsNeededInput.className = 'inputfield numberInput hostTableInput';
+                networkNHostsNeededInput.className = 'inputfield numberInput hostTableInput subElement';
                 row.insertCell().appendChild(networkNHostsNeededInput);
 
                 listOfInputs.push({networkNameInput, networkNHostsNeededInput});
@@ -219,16 +265,13 @@ function vlsmFormInit(form) {
                 e.preventDefault();
                 unchild(resultContainer);
                 
-                const [ valid, message, wrongInputFields ] = validityCheckerVLSM1(document.querySelectorAll('input[type="number"]'));
-                warningMsg1.textContent = message;
-                wrongInputFields.forEach((input) => {
-                    input.classList.add('wrongInput');
-                });
-        
+                removeRedBorders(document.querySelectorAll('.hostTableInput.subElement'));
+
+                const valid = validityCheckerVLSM1(document.querySelectorAll('.initialElement'), warningMsg1) && validityCheckerVLSM2(prefixInput,document.querySelectorAll('.hostTableInput.subElement'), warningMsg2);
+                
                 if (valid){
-                    for (const input of document.querySelectorAll('input[type="number"]')) {
-                        input.classList.remove('wrongInput');
-                    }
+                    removeRedBorders(document.querySelectorAll('input[type="number"]'));
+
                     const numberOfNetworks = parseInt(numberOfNetworksInput.value);
                     const ipAddress = [octet1.value, octet2.value, octet3.value, octet4.value].map((x) => parseInt(x));
                     const mainPrefix = parseInt(prefixInput.value);

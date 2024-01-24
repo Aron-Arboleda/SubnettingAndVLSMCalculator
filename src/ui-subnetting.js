@@ -25,34 +25,34 @@ export function validityCheckerSubnetting(arrayOfInputs) {
     const prefixInputValue = parseInt(prefixInput.value);
 
     if (classType === 'A'){
-        if (hostInputValue > 2147483646 || hostInputValue < 2){
+        if ((hostInputValue > 2147483646 || hostInputValue < 2) || isNaN(hostInputValue)) {
             wrongInputFields.push(hostInput);
         }
         
-        if (prefixInputValue < 1 || prefixInputValue.value > 30) {
+        if ((prefixInputValue < 1 || prefixInputValue > 30) || isNaN(prefixInputValue)) {
             wrongInputFields.push(prefixInput);
         }
     } else if (classType === 'B'){
-        if (hostInputValue > 32766 || hostInputValue < 2){
+        if ((hostInputValue > 32766 || hostInputValue < 2) || isNaN(hostInputValue)) {
             wrongInputFields.push(hostInput);
         }
         
-        if (prefixInputValue < 16 || prefixInputValue.value > 30) {
+        if ((prefixInputValue < 16 || prefixInputValue > 30) || isNaN(prefixInputValue)) {
             wrongInputFields.push(prefixInput);
         }
     } else if (classType === 'C'){
-        if (hostInputValue > 126 || hostInputValue < 2){
+        if ((hostInputValue > 126 || hostInputValue < 2) || isNaN(hostInputValue)) {
             wrongInputFields.push(hostInput);
         }
         
-        if (prefixInputValue < 24 || prefixInputValue.value > 30) {
+        if ((prefixInputValue < 24 || prefixInputValue > 30) || isNaN(prefixInputValue)) {
             wrongInputFields.push(prefixInput);
         }
     } 
 
     for (const octetInput of [octet1, octet2, octet3, octet4]){
         const value = parseInt(octetInput.value);
-        if (value > 255 || value < 0){
+        if ((value > 255 || value < 0) || isNaN(value)) {
             wrongInputFields.push(octetInput);
         }
     }
@@ -70,7 +70,7 @@ export function validityCheckerSubnetting(arrayOfInputs) {
         valid = false;
     }
 
-    message = (valid == false && message === '') ? '*Please double check your inputs.' : message;
+    message = (valid == false && message === '') ? '*Please double check your inputs. *All fields are required' : message;
     
     return [ valid, message, wrongInputFields ];
 }
@@ -181,8 +181,8 @@ function subnettingFormInit(form) {
 
     const prefixInput = document.createElement('input');
     prefixInput.type = 'number';
-    prefixInput.min = '0';
-    prefixInput.max = '32';
+    prefixInput.min = '1';
+    prefixInput.max = '30';
     prefixInput.className = 'inputfield numberInput prefixInput';
     ipAddressDiv.appendChild(prefixInput);
 

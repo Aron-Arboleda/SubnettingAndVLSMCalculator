@@ -219,10 +219,16 @@ function vlsmFormInit(form) {
                 e.preventDefault();
                 unchild(resultContainer);
                 
-                //checking if all inputs are valid here
+                const [ valid, message, wrongInputFields ] = validityCheckerVLSM1(document.querySelectorAll('input[type="number"]'));
+                warningMsg1.textContent = message;
+                wrongInputFields.forEach((input) => {
+                    input.classList.add('wrongInput');
+                });
         
-                if (warningMsg2.innerHTML === ''){
-        
+                if (valid){
+                    for (const input of document.querySelectorAll('input[type="number"]')) {
+                        input.classList.remove('wrongInput');
+                    }
                     const numberOfNetworks = parseInt(numberOfNetworksInput.value);
                     const ipAddress = [octet1.value, octet2.value, octet3.value, octet4.value].map((x) => parseInt(x));
                     const mainPrefix = parseInt(prefixInput.value);

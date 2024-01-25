@@ -25,7 +25,7 @@ export function validityCheckerSubnetting(arrayOfInputs) {
     const prefixInputValue = parseInt(prefixInput.value);
 
     if (classType === 'A'){
-        if ((hostInputValue > 2147483646 || hostInputValue < 2) || isNaN(hostInputValue)) {
+        if ((hostInputValue > 16777214 || hostInputValue < 2) || isNaN(hostInputValue)) {
             wrongInputFields.push(hostInput);
         }
         
@@ -33,7 +33,7 @@ export function validityCheckerSubnetting(arrayOfInputs) {
             wrongInputFields.push(prefixInput);
         }
     } else if (classType === 'B'){
-        if ((hostInputValue > 32766 || hostInputValue < 2) || isNaN(hostInputValue)) {
+        if ((hostInputValue > 65534 || hostInputValue < 2) || isNaN(hostInputValue)) {
             wrongInputFields.push(hostInput);
         }
         
@@ -41,7 +41,7 @@ export function validityCheckerSubnetting(arrayOfInputs) {
             wrongInputFields.push(prefixInput);
         }
     } else if (classType === 'C'){
-        if ((hostInputValue > 126 || hostInputValue < 2) || isNaN(hostInputValue)) {
+        if ((hostInputValue > 254 || hostInputValue < 2) || isNaN(hostInputValue)) {
             wrongInputFields.push(hostInput);
         }
         
@@ -250,13 +250,22 @@ export function SubnettingInit() {
     const calculatorTitle = document.createElement('h3');
     calculatorTitle.textContent = `🧮 Subnetting Calculator`;
 
+    const noteContainerSubnetting = document.createElement('div');
+    noteContainerSubnetting.className = 'noteContainer';
+    noteContainerSubnetting.innerHTML = `
+        Different network class means different ranges of available usable hosts in the network.<br>
+        Class A: Prefix /8 - /15, usable hosts may vary around: 131,070 upto 16,777,214 hosts<br>
+        Class B: Prefix /16 - /23, usable hosts may vary around: 510 upto 65,534 hosts<br>
+        Class C: Prefix /24 - /30, usable hosts may vary around: 2 upto 254 hosts
+    `;
+
     const form = document.createElement('form');
     form.id = 'subnetting-form';
 
     subnettingFormInit(form);
 
     
-    contentArea.append(title, context, calculatorTitle, form, resultContainer);
+    contentArea.append(title, context, calculatorTitle, noteContainerSubnetting, form, resultContainer);
 }
 
 

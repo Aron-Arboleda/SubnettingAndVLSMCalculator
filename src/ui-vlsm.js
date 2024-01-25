@@ -316,13 +316,26 @@ export function VLSMInit() {
     const calculatorTitle = document.createElement('h3');
     calculatorTitle.textContent = `🧮 VLSM Calculator`;
 
+    const noteContainerVLSM = document.createElement('div');
+    noteContainerVLSM.className = 'noteContainer';
+    noteContainerVLSM.innerHTML = `
+        Total number of networks (subnets) reference:<br>
+        • Prefix /8 - /15, total subnets may vary around: 65,536 upto 4,194,304 networks<br>
+        • Prefix /16 - /23, total subnets may vary around: 128 upto 32,768 networks<br>
+        • Prefix /24 - /30, total subnets may vary around: 1 upto 64 networks<br>
+        Total usable hosts reference:<br>
+        • Prefix /8 - /15, usable hosts may vary around: 131,070 upto 16,777,214 hosts<br>
+        • Prefix /16 - /23, usable hosts may vary around: 510 upto 65,534 hosts<br>
+        • Prefix /24 - /30, usable hosts may vary around: 2 upto 254 hosts
+    `;
+
     const form = document.createElement('form');
     form.id = 'vlsm-form';
 
     vlsmFormInit(form);
 
     
-    contentArea.append(title, context, calculatorTitle, form);
+    contentArea.append(title, context, calculatorTitle, noteContainerVLSM, form);
 }
 
 

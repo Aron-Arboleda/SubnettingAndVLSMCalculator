@@ -49,8 +49,8 @@
 #networkClassDiv {
     display: grid;
     grid-template-columns: auto auto auto;
-    min-width: 25%;
-    max-width: 30%;
+    min-width: 100px;
+    max-width: 150px;
     align-items: center;
     column-gap: 10px;
 }

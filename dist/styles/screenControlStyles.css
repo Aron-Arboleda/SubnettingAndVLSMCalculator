@@ -1,0 +1,131 @@
+@import url("./generalStyles.css");
+
+@media (max-width: 1315px) {
+    aside {
+        padding-left: 100px;
+        width: 400px;
+    }
+
+    main {
+        padding-left: 400px;
+        padding-right: 100px;
+    }
+
+    header {
+        padding-left: 100px;
+    }
+}
+
+@media (max-width: 1115px) {
+    aside {
+        padding-left: 50px;
+        width: 350px;
+    }
+
+    main {
+        padding-left: 350px;
+        padding-right: 50px;
+    }
+
+    header {
+        padding-left: 50px;
+    }
+}
+
+@media (max-width: 1015px) {
+    aside {
+        padding-left: 20px;
+        width: 320px;
+    }
+
+    main {
+        padding-left: 320px;
+        padding-right: 20px;
+    }
+
+    header {
+        padding-left: 20px;
+    }
+}
+
+@media (max-width: 955px) {
+    aside {
+        display: none;
+        position: fixed;
+        z-index: 99999;
+        background-color: rgba(255, 255, 255, 0.947);
+        width: 70%;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        padding: 30px 30px;
+        flex-direction: column;
+    }
+
+    .noteContainer {
+        font-size: smaller;
+    }
+
+    .proceedButtons {
+        font-size: smaller;
+        width: smaller;
+    }
+
+    footer p{
+        font-size: smaller;
+    }
+
+    input[type="number"] {
+        font-size: 14px;
+        height: 25px;
+        width: 60px;
+    }
+
+    nav {
+        display: block;
+    }
+
+    header,
+    nav {
+        border-bottom: 2px solid var(--light-highlight-color);
+    }
+
+    main {
+        padding-left: 25px;
+        padding-right: 25px;
+        font-size: smaller;
+    }
+
+    header {
+        display: block;
+        position: static;
+        padding-left: 25px;
+    }
+
+    header img{
+        height: 30px;
+        cursor: pointer;
+    }
+
+    body {
+        padding-top: 0px;
+    }
+
+    .content-area {
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+
+}
+
+@media (max-width: 573px) {
+    #inputContainer {
+        grid-template-columns: 1fr;
+    }
+
+    input[type="number"] {
+        font-size: 14px;
+        height: 20px;
+        width: 50px;
+    }
+}

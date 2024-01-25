@@ -60,7 +60,7 @@ export function validityCheckerVLSM2(prefixInput, hostInputs, warningMsgElem) {
     const prefixInputValue = parseInt(prefixInput.value);
 
     hostInputs.forEach((hostInput) => {
-        if ((parseInt(hostInput.value) > logic.totalHostsOfNetwork(prefixInputValue) - 2) || hostInput.value === ''){
+        if ((parseInt(hostInput.value) > logic.totalHostsOfNetwork(prefixInputValue) - 2) || hostInput.value === '' || parseInt(hostInput.value) < 0){
             wrongInputFields.push(hostInput);
             valid = false;
         }

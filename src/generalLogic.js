@@ -6,6 +6,33 @@ export function intToBinary(integer) {
     return integer.toString(2);
 }
 
+export function ipv4ToBinary(ipv4Address) {
+    return ipv4Address.split('.').map(octet => parseInt(octet, 10).toString(2).padStart(8, '0')).join('.');
+}
+
+export function getOrdinal(n) {
+    if (n % 100 >= 11 && n % 100 <= 13) {
+        return n + "th";
+    }
+    switch (n % 10) {
+        case 1:
+            return n + "st";
+        case 2:
+            return n + "nd";
+        case 3:
+            return n + "rd";
+        default:
+            return n + "th";
+    }
+}
+
+export function subtractIPv4Addresses(ipv4Address1, ipv4Address2) {
+    const toDecimal = ip => ip.split('.').reduce((acc, octet) => acc * 256 + parseInt(octet, 10), 0);
+    const decimalIP1 = toDecimal(ipv4Address1);
+    const decimalIP2 = toDecimal(ipv4Address2);
+    return decimalIP1 - decimalIP2;
+}
+
 export function addBinaryIPAndCapacity(ipv4Address, hostCapacity) {
     const toBinaryString = ip => ip.split('.').map(octet => parseInt(octet, 10).toString(2).padStart(8, '0')).join('');
     const binaryIP = toBinaryString(ipv4Address);
@@ -77,6 +104,27 @@ export function getNetworkClass(prefix) {
     }
 }
 
+export function getNetworkAddress(ipv4Address, subnetMask) {
+    const ipOctets = ipv4Address.split('.').map(Number);
+    const maskOctets = subnetMask.split('.').map(Number);
+    const networkAddressOctets = ipOctets.map((octet, index) => octet & maskOctets[index]);
+    return networkAddressOctets.join('.');
+}
 
+export function getSubnetPosition(mainPrefix, newPrefix, networkAddress){
+    const borrowedBits = newPrefix - mainPrefix;
+    const binaryNetworkAddress = ipv4ToBinary(networkAddress);
+    const binaryNetworkAddressDotsRemoved = binaryNetworkAddress.replace(/[.]/g, '');
+    const subnetPosition = `S${binaryToInt(binaryNetworkAddressDotsRemoved.slice(mainPrefix, mainPrefix + borrowedBits))}`;
+    return subnetPosition;
+}
 
-//console.log(computeSubnets('192.168.2.0', 32, 3, '255.255.255.224' ,'/27'));
+export function getAddressLabel(ipAddress, networkAddress, broadcastAddress) {
+    if (ipAddress !== networkAddress && ipAddress !== broadcastAddress){
+        return `${getOrdinal(subtractIPv4Addresses(ipAddress, networkAddress))} Usable Host`;
+    } else if (ipAddress === networkAddress) {
+        return 'Network Address';
+    } else if (ipAddress === broadcastAddress) {
+        return 'Broadcast Address';
+    }
+}

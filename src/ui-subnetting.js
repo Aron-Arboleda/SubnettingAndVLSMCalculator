@@ -81,7 +81,7 @@ function displayResults(networkClass, usableHosts, ipAddress, prefix) {
     
     const computedDataObject = doSubnetting(networkClass, usableHosts, ipAddress, prefix);
     const computedDataValues = Object.values(computedDataObject);
-    const initialInfoLabels = ['IP Address:', 'Total Number of Hosts per Subnet:', 'Number of Usable Hosts per Subnet:', 'Total Subnets Created:', 'Subnet Mask:', 'Binary Subnet Mask:', 'Wildcard Mask:', 'Network Class:', 'CIDR Notation:', 'IP Type:', 'Short Form:'];
+    const initialInfoLabels = ['IP Address:', 'Subnet Position:', 'Network Address:', 'Broadcast Address:', 'Address Label:',  'Total Number of Hosts per Subnet:', 'Number of Usable Hosts per Subnet:', 'Total Subnets Created:', 'Subnet Mask:', 'Binary Subnet Mask:', 'Wildcard Mask:', 'Network Class:', 'CIDR Notation:', 'IP Type:', 'Short Form:'];
     const initialInfoTableContainer = document.createElement('div');
     initialInfoTableContainer.className = 'resultTablesContainer';
     const initialInfoTable = document.createElement('table');
@@ -164,7 +164,7 @@ function subnettingFormInit(form) {
     inputContainer.appendChild(hostInput);
 
     const ipAddressLabel = document.createElement('label');
-    ipAddressLabel.textContent = 'Main IP Address';
+    ipAddressLabel.textContent = 'IP Address';
     inputContainer.appendChild(ipAddressLabel);
 
     const ipAddressDiv = document.createElement('div');
@@ -264,7 +264,9 @@ export function SubnettingInit() {
         Different network class means different ranges of available usable hosts in the network.<br>
         Class A: Prefix /8 - /15, usable hosts may vary around: 131,070 upto 16,777,214 hosts<br>
         Class B: Prefix /16 - /23, usable hosts may vary around: 510 upto 65,534 hosts<br>
-        Class C: Prefix /24 - /30, usable hosts may vary around: 2 upto 254 hosts
+        Class C: Prefix /24 - /30, usable hosts may vary around: 2 upto 254 hosts<br>
+        <br>
+        *Click <b>Compute and Show Results</b> button whenever you change your input value(s) to refresh the results.
     `;
 
     const form = document.createElement('form');

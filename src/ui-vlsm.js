@@ -332,7 +332,9 @@ export function VLSMInit() {
         Total usable hosts reference:<br>
         • Prefix /8 - /15, usable hosts may vary around: 131,070 upto 16,777,214 hosts<br>
         • Prefix /16 - /23, usable hosts may vary around: 510 upto 65,534 hosts<br>
-        • Prefix /24 - /30, usable hosts may vary around: 2 upto 254 hosts
+        • Prefix /24 - /30, usable hosts may vary around: 2 upto 254 hosts<br>
+        <br>
+        *Click <b>Continue</b> button whenever you change the value in the "Total number of networks needed" input field to reset the input table.
     `;
 
     const form = document.createElement('form');

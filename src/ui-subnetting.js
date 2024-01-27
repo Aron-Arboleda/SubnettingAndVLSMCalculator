@@ -97,31 +97,34 @@ function displayResults(networkClass, usableHosts, ipAddress, prefix) {
     }
 
     const subnetTableHeader = document.createElement('h4');
-    subnetTableHeader.textContent = 'Subnetting Table';
 
     const subnettingInfoLabels = ['Subnet', 'Network Address', 'First Usable Host', 'Last Usable Host', 'Broadcast Address', 'Number of Usable Hosts', 'Subnet Mask', 'Prefix'];
 
+    
     const subnettingInfoTableContainer = document.createElement('div');
     subnettingInfoTableContainer.className = 'subnettingTablesContainer';
-    const subnettingInfoTable = document.createElement('table');
-    subnettingInfoTable.className = 'subnettingTables';
-    subnettingInfoTableContainer.appendChild(subnettingInfoTable);
 
-    const subnettingTableHeaderRow = subnettingInfoTable.insertRow();
-    for (let label of subnettingInfoLabels) {
-        const labelCell = subnettingTableHeaderRow.insertCell();
-        labelCell.textContent = label;
-    }
+    if (computedDataObject.subnets.length < 30000){
+        subnetTableHeader.textContent = 'Subnetting Table';
+        const subnettingInfoTable = document.createElement('table');
+        subnettingInfoTable.className = 'subnettingTables';
+        subnettingInfoTableContainer.appendChild(subnettingInfoTable);
 
-    for (let i = 0; i < computedDataObject.subnets.length; i++) {
-        const row = subnettingInfoTable.insertRow();
-        const values = Object.values(computedDataObject.subnets[i]);
-        for (let j = 0; j < values.length; j++) {
-            const cell = row.insertCell();
-            cell.textContent = values[j];
+        const subnettingTableHeaderRow = subnettingInfoTable.insertRow();
+        for (let label of subnettingInfoLabels) {
+            const labelCell = subnettingTableHeaderRow.insertCell();
+            labelCell.textContent = label;
+        }
+
+        for (let i = 0; i < computedDataObject.subnets.length; i++) {
+            const row = subnettingInfoTable.insertRow();
+            const values = Object.values(computedDataObject.subnets[i]);
+            for (let j = 0; j < values.length; j++) {
+                const cell = row.insertCell();
+                cell.textContent = values[j];
+            }
         }
     }
-
     
     resultContainer.append(resultHeader, initialInfoTableContainer, subnetTableHeader, subnettingInfoTableContainer);
 }
@@ -266,7 +269,8 @@ export function SubnettingInit() {
         Class B: Prefix /16 - /23, usable hosts may vary around: 510 upto 65,534 hosts<br>
         Class C: Prefix /24 - /30, usable hosts may vary around: 2 upto 254 hosts<br>
         <br>
-        *Click <b>Compute and Show Results</b> button whenever you change your input value(s) to refresh the results.
+        *Click <b>Compute and Show Results</b> button whenever you change your input value(s) to refresh the results.<br>
+        P.S. If calculator is required to show large results starting from <b>30k+ subnets</b>, it will only show the initial information and not the full subnetting table to prevent processing failure.
     `;
 
     const form = document.createElement('form');

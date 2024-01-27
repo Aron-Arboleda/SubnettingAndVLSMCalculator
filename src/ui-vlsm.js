@@ -226,6 +226,7 @@ function vlsmFormInit(form) {
 
             const numberOfNetworksInputTable = document.createElement('table');
             numberOfNetworksInputTable.id = 'numberOfNetworksInputTable';
+            numberOfNetworksInputTable.className = 'inputTables';
             const headerRow = numberOfNetworksInputTable.insertRow();
             headerRow.className = 'headerRow';
             const networknameHeaderCell = headerRow.insertCell();

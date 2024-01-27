@@ -100,8 +100,11 @@ function displayResults(resultContainer, numberOfNetworks, ipAddress, mainPrefix
     const computedDataObject = doVLSM(numberOfNetworks, ipAddress, mainPrefix, networksArray);
     const computedDataValues = Object.values(computedDataObject);
     const initialInfoLabels = ['IP Address', 'Number of Usable Hosts', 'Main Network Subnet Mask', 'Subnet Mask in Binary', 'IP Class', 'IP Type', 'Short Form'];
+    const initialInfoTableContainer = document.createElement('div');
+    initialInfoTableContainer.className = 'resultTablesContainer';
     const initialInfoTable = document.createElement('table');
     initialInfoTable.className = 'resultTables';
+    initialInfoTableContainer.appendChild(initialInfoTable);
 
     for (let i = 0; i < initialInfoLabels.length; i++) {
         const row = initialInfoTable.insertRow();
@@ -116,8 +119,11 @@ function displayResults(resultContainer, numberOfNetworks, ipAddress, mainPrefix
     vlsmTableHeader.textContent = 'VLSM Table';
 
     const vlsmInfoLabels = ['Subnet Name', 'Needed Hosts', 'Available Hosts', 'Unused Hosts', 'Network Address', 'Prefix', 'Subnet Mask', 'Usable Hosts Range', 'Broadcast Address', 'Wildcard Mask'];
+    const vlsmInfoTableContainer = document.createElement('div');
+    vlsmInfoTableContainer.className = 'subnettingTablesContainer';
     const vlsmInfoTable = document.createElement('table');
     vlsmInfoTable.className = 'subnettingTables';
+    vlsmInfoTableContainer.appendChild(vlsmInfoTable);
 
     const vlsmTableHeaderRow = vlsmInfoTable.insertRow();
     for (let label of vlsmInfoLabels) {
@@ -134,7 +140,7 @@ function displayResults(resultContainer, numberOfNetworks, ipAddress, mainPrefix
         }
     }
 
-    resultContainer.append(resultHeader, initialInfoTable, vlsmTableHeader, vlsmInfoTable);
+    resultContainer.append(resultHeader, initialInfoTableContainer, vlsmTableHeader, vlsmInfoTableContainer);
 }
 
 function vlsmFormInit(form) {

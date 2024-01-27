@@ -82,8 +82,11 @@ function displayResults(networkClass, usableHosts, ipAddress, prefix) {
     const computedDataObject = doSubnetting(networkClass, usableHosts, ipAddress, prefix);
     const computedDataValues = Object.values(computedDataObject);
     const initialInfoLabels = ['IP Address:', 'Total Number of Hosts per Subnet:', 'Number of Usable Hosts per Subnet:', 'Total Subnets Created:', 'Subnet Mask:', 'Binary Subnet Mask:', 'Wildcard Mask:', 'Network Class:', 'CIDR Notation:', 'IP Type:', 'Short Form:'];
+    const initialInfoTableContainer = document.createElement('div');
+    initialInfoTableContainer.className = 'resultTablesContainer';
     const initialInfoTable = document.createElement('table');
     initialInfoTable.className = 'resultTables';
+    initialInfoTableContainer.appendChild(initialInfoTable);
 
     for (let i = 0; i < initialInfoLabels.length; i++) {
         const row = initialInfoTable.insertRow();
@@ -97,8 +100,12 @@ function displayResults(networkClass, usableHosts, ipAddress, prefix) {
     subnetTableHeader.textContent = 'Subnetting Table';
 
     const subnettingInfoLabels = ['Subnet', 'Network Address', 'First Usable Host', 'Last Usable Host', 'Broadcast Address', 'Number of Usable Hosts', 'Subnet Mask', 'Prefix'];
+
+    const subnettingInfoTableContainer = document.createElement('div');
+    subnettingInfoTableContainer.className = 'subnettingTablesContainer';
     const subnettingInfoTable = document.createElement('table');
     subnettingInfoTable.className = 'subnettingTables';
+    subnettingInfoTableContainer.appendChild(subnettingInfoTable);
 
     const subnettingTableHeaderRow = subnettingInfoTable.insertRow();
     for (let label of subnettingInfoLabels) {
@@ -115,7 +122,8 @@ function displayResults(networkClass, usableHosts, ipAddress, prefix) {
         }
     }
 
-    resultContainer.append(resultHeader, initialInfoTable, subnetTableHeader, subnettingInfoTable);
+    
+    resultContainer.append(resultHeader, initialInfoTableContainer, subnetTableHeader, subnettingInfoTableContainer);
 }
 
 function subnettingFormInit(form) {

@@ -1,13 +1,19 @@
-
+.subnettingTablesContainer,
+.resultTablesContainer {
+    width: 100%;
+	overflow: auto;
+	margin: 0px auto;
+}
 
 .resultTables {
+    padding-left: 10px;
     width: 60%;
     border-collapse: collapse;
-    margin: 25px 0;
+    margin: 20px;
     font-size: 0.9em;
     font-family: 'Inter', sans-serif;
     min-width: 400px;
-    box-shadow: 0 0 20px #00000026;
+    box-shadow: 0px 0px 20px 0px #00000026;
 }
 
 .resultTables thead tr {
@@ -38,11 +44,10 @@
     color: var(--text-color);
 }
 
-.subnettingTables {
 
-    max-width: 100%;
+.subnettingTables {
     border-collapse: collapse;
-    margin: 25px 0;
+    margin: 20px;
     font-size: 0.75em;
     font-family: 'Inter', sans-serif;
     text-align: center;

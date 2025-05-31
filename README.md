@@ -6,7 +6,6 @@
 
 - **Developer**: Aron-Arboleda
 - **Started**: May 2024
-- **License**: MIT
 
 ## Subnetting and VLSM Calculator for Networking
 

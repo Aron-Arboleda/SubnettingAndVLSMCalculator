@@ -5,7 +5,7 @@
 ## Info
 
 - **Developer**: Aron-Arboleda
-- **Started**: May 2024
+- **Started**: Jan 2024
 
 ## Subnetting and VLSM Calculator for Networking
 
